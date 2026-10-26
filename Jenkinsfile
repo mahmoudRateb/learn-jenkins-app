@@ -4,6 +4,7 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = 'debceb04-46ae-442b-8c04-aa9498335494'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+        REACT_APP_VERSION = '1.2.3'
     }
 
     stages {
@@ -131,14 +132,6 @@ pipeline {
                         reportTitles: '',
                         useWrapperFileDirectly: true
                     ])
-                }
-            }
-        }
-
-        stage('Approval') {
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    input message: 'Ready to deploy to production?', ok: 'I\'m sure. Yes deploy!'
                 }
             }
         }
