@@ -1,17 +1,17 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'amazon/aws-cli'
+            args "--entrypoint=''"
+        }
+    }
+    environment {
+        AWS_S3_BUCKET = 'rateb-mock'
+    }
 
     stages {
         stage('AWS') {
-            agent {
-                docker {
-                    image 'amazon/aws-cli'
-                    args "--entrypoint=''"
-                }
-            }
-            environment {
-                AWS_S3_BUCKET = 'rateb-mock'
-            }
+
             steps {
                 withCredentials([
                     usernamePassword(
@@ -22,7 +22,6 @@ pipeline {
                 ]) {
                     sh '''
                         aws --version
-                        echo "Hello S3!" >> index.html
                         aws s3 sync build s3://$AWS_S3_BUCKET
                     '''
                 }
@@ -30,12 +29,6 @@ pipeline {
         }
 
         stage('Deploy to AWS') {
-            agent {
-                docker {
-                    image 'amazon/aws-cli'
-                    args "--entrypoint=''"
-                }
-            }
             steps {
                 withCredentials([
                     usernamePassword(
