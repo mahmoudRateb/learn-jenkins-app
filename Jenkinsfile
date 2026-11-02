@@ -22,7 +22,7 @@ pipeline {
                 ]) {
                     sh '''
                         aws --version
-                        aws s3 ls
+                        aws sts get-caller-identity
                     '''
                 }
             }
