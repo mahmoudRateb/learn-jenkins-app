@@ -45,7 +45,7 @@ pipeline {
                         aws ecs update-service \
                             --cluster LearnJenkinsApp-Cluster-Prod \
                             --service LearnJenkinsApp-Service-Prod \
-                            --task-definition LearnJenkinsApp-TaskDef-Prod:6
+                            --task-definition LearnJenkinsApp-TaskDef-Prod:9
                     '''
                 }
             }
