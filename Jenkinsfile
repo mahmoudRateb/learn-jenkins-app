@@ -39,13 +39,16 @@ pipeline {
                 ]) {
                     sh '''
                         aws --version
-                        aws ecs register-task-definition  \
+                        yum install jq -y
+                        LATEST_REVISION=$(aws ecs register-task-definition  \
                             --cli-input-json file://aws/task-definition-prod.json \
-                            --region $AWS_REGION
+                            --region $AWS_REGION \
+                            jq '.taskDefinition.revision')
+                        echo "The revision number is $LATEST_REVISION"
                         aws ecs update-service \
                             --cluster LearnJenkinsApp-Cluster-Prod \
                             --service LearnJenkinsApp-Service-Prod \
-                            --task-definition LearnJenkinsApp-TaskDef-Prod:9
+                            --task-definition LearnJenkinsApp-TaskDef-Prod:$LATEST_REVISION
                     '''
                 }
             }
