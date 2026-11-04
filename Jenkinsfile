@@ -8,6 +8,9 @@ pipeline {
     environment {
         AWS_S3_BUCKET = 'rateb-mock'
         AWS_REGION = 'eu-central-1'
+        AWS_CLUSTER = 'LearnJenkinsApp-Cluster-Prod'
+        AWS_SERVICE = 'LearnJenkinsApp-Service-Prod'
+        AWS_TASK_DEF = 'LearnJenkinsApp-TaskDef-Prod'
     }
 
     stages {
@@ -46,12 +49,12 @@ pipeline {
                             | jq '.taskDefinition.revision')
                         echo "The revision number is $LATEST_REVISION"
                         aws ecs update-service \
-                            --cluster LearnJenkinsApp-Cluster-Prod \
-                            --service LearnJenkinsApp-Service-Prod \
-                            --task-definition LearnJenkinsApp-TaskDef-Prod:$LATEST_REVISION
+                            --cluster $AWS_CLUSTER \
+                            --service $AWS_SERVICE \
+                            --task-definition $AWS_TASK_DEF:$LATEST_REVISION
                         aws ecs wait services-stable \
-                            --cluster LearnJenkinsApp-Cluster-Prod \
-                            --services LearnJenkinsApp-Service-Prod
+                            --cluster $AWS_CLUSTER \
+                            --services $AWS_SERVICE
                     '''
                 }
             }
