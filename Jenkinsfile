@@ -43,7 +43,7 @@ pipeline {
                         LATEST_REVISION=$(aws ecs register-task-definition  \
                             --cli-input-json file://aws/task-definition-prod.json \
                             --region $AWS_REGION \
-                            jq '.taskDefinition.revision')
+                            | jq '.taskDefinition.revision')
                         echo "The revision number is $LATEST_REVISION"
                         aws ecs update-service \
                             --cluster LearnJenkinsApp-Cluster-Prod \
