@@ -16,30 +16,13 @@ pipeline {
             }
         }
 
-        stage('AWS') {
+        stage('Deploy to AWS') {
             agent {
                 docker {
                     image 'amazon/aws-cli'
                     args "-u root --entrypoint=''"
                 }
             }
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'aws_creds',
-                        usernameVariable: 'AWS_ACCESS_KEY_ID',
-                        passwordVariable: 'AWS_SECRET_ACCESS_KEY'
-                    )
-                ]) {
-                    sh '''
-                        aws --version
-                        aws sts get-caller-identity
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy to AWS') {
             steps {
                 withCredentials([
                     usernamePassword(
