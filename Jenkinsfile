@@ -1,10 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'amazon/aws-cli'
-            args "-u root --entrypoint=''"
-        }
-    }
+    agent any
+
     environment {
         AWS_S3_BUCKET = 'rateb-mock'
         AWS_REGION = 'eu-central-1'
@@ -38,8 +34,14 @@ pipeline {
                 sh 'docker build -t myjenkinsapp .'
             }
         }
-        
+
         stage('AWS') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli'
+                    args "-u root --entrypoint=''"
+                }
+            }
             steps {
                 withCredentials([
                     usernamePassword(
