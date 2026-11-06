@@ -14,6 +14,11 @@ pipeline {
     }
 
     stages {
+        stage('Build Docker image') {
+            steps {
+                sh 'docker build -t myjenkinsapp .'
+            }
+        }
         stage('AWS') {
             steps {
                 withCredentials([
